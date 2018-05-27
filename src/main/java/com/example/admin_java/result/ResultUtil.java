@@ -11,7 +11,7 @@ package com.example.admin_java.result;
 public class ResultUtil {
 
     public static Result success(Object object) {
-        Result result = new Result(200, ResultEnum.getMessageByCode(200), object);
+        Result result = new Result(200, ResultCodeEnum.getMessageByCode(200), object);
         return result;
     }
 
@@ -20,7 +20,7 @@ public class ResultUtil {
     }
 
     public static Result error(int code) {
-        Result result = new Result(code, ResultEnum.getMessageByCode(code));
+        Result result = new Result(code, ResultCodeEnum.getMessageByCode(code));
         return result;
     }
 
