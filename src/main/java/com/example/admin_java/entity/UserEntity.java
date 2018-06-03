@@ -27,7 +27,7 @@ public class UserEntity implements Serializable{
     @Column(name = "mobile_num")
     private String mobilePhone;
     @Column(name = "last_login")
-    private Date lastLogin;
+    private String lastLogin;
     private String gtime;
     private String utime;
 

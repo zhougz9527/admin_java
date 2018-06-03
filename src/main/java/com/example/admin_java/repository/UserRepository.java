@@ -11,6 +11,6 @@ import com.example.admin_java.entity.UserEntity;
  * @Time: 22:54
  */
 public interface UserRepository extends BaseRepository<UserEntity, Integer> {
-    UserEntity findByMobilePhone(String mobile);
+    UserEntity findByUsername(String username);
     UserEntity findByUid(int uid);
 }

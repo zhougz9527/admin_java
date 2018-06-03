@@ -23,7 +23,7 @@ public interface UserService {
 
     void delete(String mobile_num);
 
-    UserEntity findByMobile(String mobile);
+    UserEntity findByUsername(String username);
 
     UserEntity findByUid(int uid);
 

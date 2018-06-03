@@ -18,8 +18,10 @@ public enum ResultCodeEnum {
     USERNAME_NOT_EMPTY(10001, "用户名不能为空"),
     LOGIN_ERROR(10002, "登录失败"),
     PWD_NOT_RULE(10003, "密码必须大于等于6位且小等于12位"),
-    MOBILE_NOT_RULE(10004, "手机号码格式错误"),
-    NICKNAME_NOT_RULE(10005, "昵称只能包含中文数字和下划线,位数要大于4位且小于19位");
+    USERNAME_NOT_RULE(10004, "用户名必须是手机号或者邮箱"),
+    NICKNAME_NOT_RULE(10005, "昵称只能包含中文数字和下划线,位数要大于4位且小于19位"),
+    MOBILE_NOT_RULE(10006, "该手机号码已经被注册"),
+    SEND_CODE_FAILED(10007, "发送验证码失败");
 
     public int code;
     public String message;
