@@ -24,8 +24,6 @@ public class UserEntity implements Serializable{
     private String avatar;
     private String password;
     private String nickname;
-    @Column(name = "mobile_num")
-    private String mobilePhone;
     @Column(name = "last_login")
     private String lastLogin;
     private String gtime;

@@ -21,7 +21,11 @@ public enum ResultCodeEnum {
     USERNAME_NOT_RULE(10004, "用户名必须是手机号或者邮箱"),
     NICKNAME_NOT_RULE(10005, "昵称只能包含中文数字和下划线,位数要大于4位且小于19位"),
     MOBILE_NOT_RULE(10006, "该手机号码已经被注册"),
-    SEND_CODE_FAILED(10007, "发送验证码失败");
+    SEND_CODE_FAILED(10007, "发送验证码失败"),
+    VERIFY_CODE_ERROR(10008, "验证码错误"),
+    PARAM_ERROR(10009, "缺少必要参数"),
+    IMAGE_CODE_ERROR(10010, "图形验证码错误"),
+    IMAGE_BASE64_ERROR(10011, "图片转换base64错误");
 
     public int code;
     public String message;

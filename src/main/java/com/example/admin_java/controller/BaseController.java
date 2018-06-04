@@ -38,8 +38,7 @@ public class BaseController {
      *
      * @return
      */
-    public static String sendMobileCode(String mobile) throws ClientException {
-        String randomNum = createRandomNum(6);
+    public static boolean sendMobileCode(String mobile, String randomNum) throws ClientException {
         String jsonContent = "{\"code\":\"" + randomNum + "\"} ";
 
         Map<String, String> paramMap = new HashMap<>();
@@ -51,9 +50,9 @@ public class BaseController {
         log.info("sendSmsResponse: {}", sendSmsResponse.toString());
         if (!(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK"))) {
             log.info("sendSmsResponse.getCode(): {}", sendSmsResponse.getCode().toString());
-            return "";
+            return false;
         }
-        return randomNum;
+        return true;
     }
 
 }

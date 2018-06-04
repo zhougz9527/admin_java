@@ -62,6 +62,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- 发送邮箱依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<!-- 阿里云短信jar依赖 start -->
 		<dependency>
 			<groupId>aliyun-message-sdk-core</groupId>
