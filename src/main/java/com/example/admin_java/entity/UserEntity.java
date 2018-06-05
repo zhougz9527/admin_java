@@ -20,7 +20,7 @@ public class UserEntity implements Serializable{
 
     @Id
     private int uid;
-    private String username;
+    private String account;
     private String avatar;
     private String password;
     private String nickname;

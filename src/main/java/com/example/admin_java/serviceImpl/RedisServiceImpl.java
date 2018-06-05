@@ -1,261 +1,148 @@
 package com.example.admin_java.serviceImpl;
 
 import com.example.admin_java.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Think
  * @Date: 2018/6/2
  * @Time: 11:55
  */
+@Slf4j
 @Service
 public class RedisServiceImpl implements RedisService {
 
     @Autowired
-    StringRedisTemplate stringRedisTemplate;
+    RedisTemplate redisTemplate;
 
-    @Resource(name = "stringRedisTemplate")
-    ValueOperations<String, String> redisValue;
-
-    @Resource(name = "stringRedisTemplate")
-    SetOperations<String, String> redisSet;
-
-    @Resource(name = "stringRedisTemplate")
-    HashOperations<String, String, String> redisHash;
-
-    @Resource(name = "stringRedisTemplate")
-    ListOperations<String, String> redisList;
-
-
-    /**
-     *
-     * 设置key，value
-     *
-     * @param key
-     * @param value
-     */
     @Override
-    public void set(String key, String value) {
-        redisValue.set(key, value);
+    public boolean set(String key, Object value) {
+        boolean flag = false;
+        try {
+            ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+            operations.set(key, value);
+            flag = true;
+            log.info("写入redis成功: key: {}, value: {}", key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("写入redis失败: key: {}, value: {}, message: {}", key, value, e.getMessage());
+        }
+        return flag;
     }
 
-    /**
-     *
-     * 设置key，value，过期时间
-     *
-     * @param key
-     * @param value
-     * @param time
-     */
     @Override
-    public void set(String key, String value, long time) {
-        redisValue.set(key, value, time);
+    public boolean set(String key, Object value, long time) {
+        boolean flag = false;
+        try {
+            ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+            operations.set(key, value);
+            redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("写入redis失败: key: {}, value: {}, message: {}", key, value, e.getMessage());
+        }
+        return flag;
     }
 
-    /**
-     *
-     * 获取value
-     *
-     * @param key
-     * @return
-     */
     @Override
-    public String get(String key) {
-        return redisValue.get(key);
+    public Object get(String key) {
+        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+        return operations.get(key);
     }
 
-    /**
-     *
-     * 增长器
-     *
-     * @param key
-     * @param step
-     * @return
-     */
+    @Override
+    public boolean exists(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    @Override
+    public void delete(String key) {
+        if (exists(key)) {
+            redisTemplate.delete(key);
+        }
+    }
+
     @Override
     public long incLong(String key, long step) {
-        return redisValue.increment(key ,step);
+        return 0;
     }
 
-    /**
-     *
-     * 获取hash
-     *
-     * @param hKey
-     * @param key
-     * @return
-     */
     @Override
     public String getHash(String hKey, String key) {
-        return redisHash.get(hKey, key);
+        return null;
     }
 
-    /**
-     *
-     * 设置hash
-     *
-     * @param hKey
-     * @param key
-     * @param value
-     */
     @Override
     public void setHash(String hKey, String key, String value) {
-        redisHash.put(hKey, key, value);
+
     }
 
-    /**
-     *
-     * 获取全部的hash
-     *
-     * @param hKey
-     * @return
-     */
     @Override
     public Set<String> getHashByHKey(String hKey) {
-        return redisHash.keys(hKey);
+        return null;
     }
 
-    /***
-     *
-     * 删除hash
-     *
-     * @param hKey
-     * @param key
-     * @return
-     */
     @Override
     public long deleteHash(String hKey, String key) {
-        return redisHash.delete(hKey, key);
+        return 0;
     }
 
-    /**
-     *
-     * 左出栈
-     *
-     * @param key
-     * @return
-     */
     @Override
     public String getListPopLeft(String key) {
-        return redisList.leftPop(key);
+        return null;
     }
 
-    /**
-     *
-     * 右出栈
-     *
-     * @param key
-     * @return
-     */
     @Override
     public String getListPopRight(String key) {
-        return redisList.rightPop(key);
+        return null;
     }
 
-    /**
-     *
-     * 左入栈
-     *
-     * @param key
-     * @param value
-     */
     @Override
     public void setLeftPush(String key, String value) {
-        redisList.leftPush(key, value);
+
     }
 
-    /**
-     *
-     * 右入栈
-     *
-     * @param key
-     * @param value
-     */
     @Override
     public void setRightPush(String key, String value) {
-        redisList.rightPush(key, value);
+
     }
 
-    /**
-     *
-     * 获取List的长度
-     *
-     * @param key
-     * @return
-     */
     @Override
     public long getListSize(String key) {
-        return redisList.size(key);
+        return 0;
     }
 
-    /**
-     *
-     * 删除栈中的值
-     * count> 0：删除等于从左到右移动的值的第一个元素
-     * count< 0：删除等于从右到左移动的值的第一个元素
-     * count = 0：删除等于value的所有元素
-     * @param key
-     * @param count
-     * @param value
-     * @return
-     */
     @Override
     public long removeList(String key, long count, String value) {
-        return redisList.remove(key, count, value);
+        return 0;
     }
 
-    /**
-     *
-     * 储存set
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     @Override
     public long setSet(String key, String value) {
-        return redisSet.add(key, value);
+        return 0;
     }
 
-    /**
-     *
-     * 删除set
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     @Override
     public long deleteSet(String key, String value) {
-        return redisSet.remove(key, value);
+        return 0;
     }
 
-    /**
-     *
-     * 获取set
-     *
-     * @param key
-     * @return
-     */
     @Override
     public String getSet(String key) {
-        return redisSet.pop(key);
+        return null;
     }
 
-    /**
-     *
-     * 获取set长度
-     *
-     * @param key
-     * @return
-     */
     @Override
     public long getSetSize(String key) {
-        return redisSet.size(key);
+        return 0;
     }
 }

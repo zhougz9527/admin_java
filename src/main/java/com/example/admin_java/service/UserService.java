@@ -20,9 +20,9 @@ public interface UserService {
 
     UserEntity update(UserEntity userEntity);
 
-    void delete(String mobile_num);
+    void delete(String account);
 
-    UserEntity findByUsername(String username);
+    UserEntity findByAccount(String account);
 
     UserEntity findByUid(int uid);
 

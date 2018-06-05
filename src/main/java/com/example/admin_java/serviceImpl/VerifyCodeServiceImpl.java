@@ -21,11 +21,25 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
 
     @Override
     public VerifyCodeEntity addVerifyCode(VerifyCodeEntity verifyCodeEntity) {
+        log.info("添加验证码: verifyCodeEntity: {}", verifyCodeEntity.toString());
         return verifyCodeRepository.save(verifyCodeEntity);
     }
 
     @Override
     public VerifyCodeEntity findVerifyCodeByAccount(String account) {
+        log.info("获取验证码: account: {}", account);
         return verifyCodeRepository.findByAccount(account);
+    }
+
+    @Override
+    public void updateDateByAccountAndVerifyCode(String date, String account, String verifyCode) {
+        log.info("修改验证码过期时间: date: {}, account: {}, verifyCode: {}", date, account, verifyCode);
+        verifyCodeRepository.updateDateByAccountAndCode(date, account, verifyCode);
+    }
+
+    @Override
+    public VerifyCodeEntity findByAccountAndDate(String account, String date) {
+        log.info("查询未过期的验证码: account: {}, date: {}", account, date);
+        return verifyCodeRepository.findByAccountAndDate(account, date);
     }
 }

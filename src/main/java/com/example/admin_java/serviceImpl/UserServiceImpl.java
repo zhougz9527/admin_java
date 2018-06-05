@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-
     @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
@@ -40,16 +39,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(String username) {
-        UserEntity userEntity = userRepository.findByUsername(username);
+    public void delete(String account) {
+        UserEntity userEntity = userRepository.findByAccount(account);
         userRepository.delete(userEntity);
         log.info("删除的用户信息: {}", userEntity.toString());
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
-        log.info("获取用户账号: {}", username);
-        UserEntity userEntity = userRepository.findByUsername(username);
+    public UserEntity findByAccount(String account) {
+        log.info("获取用户账号: {}", account);
+        UserEntity userEntity = userRepository.findByAccount(account);
         return userEntity;
     }
 

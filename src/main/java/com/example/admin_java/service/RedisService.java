@@ -15,7 +15,7 @@ public interface RedisService {
      * @param key
      * @param value
      */
-    public void set(String key, String value);
+    public boolean set(String key, Object value);
 
     /**
      * 设置key value 以及过期时间
@@ -24,7 +24,7 @@ public interface RedisService {
      * @param value
      * @param time
      */
-    public void set(String key, String value, long time);
+    public boolean set(String key, Object value, long time);
 
     /**
      * 获取value
@@ -32,7 +32,24 @@ public interface RedisService {
      * @param key
      * @return
      */
-    public String get(String key);
+    public Object get(String key);
+
+    /**
+     *
+     * 是否有对应的value
+     *
+     * @param key
+     * @return
+     */
+    public boolean exists(String key);
+
+    /**
+     *
+     * 删除指定key的value
+     *
+     * @param key
+     */
+    public void delete(String key);
 
     /**
      * 增长器
