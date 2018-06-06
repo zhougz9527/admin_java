@@ -15,5 +15,7 @@ public interface VerifyCodeService {
 
     void updateDateByAccountAndVerifyCode(String date, String account, String verifyCode);
 
+    void updateStatusByAccountAndCode(String account, String verifyCode);
+
     VerifyCodeEntity findByAccountAndDate(String account, String date);
 }

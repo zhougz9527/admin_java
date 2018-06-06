@@ -38,6 +38,13 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     }
 
     @Override
+    public void updateStatusByAccountAndCode(String account, String verifyCode) {
+        log.info("修改验证码状态为已使用: account: {}, verifyCode: {}", account, verifyCode);
+        verifyCodeRepository.updateStatusByAccountAndCode(account, verifyCode);
+
+    }
+
+    @Override
     public VerifyCodeEntity findByAccountAndDate(String account, String date) {
         log.info("查询未过期的验证码: account: {}, date: {}", account, date);
         return verifyCodeRepository.findByAccountAndDate(account, date);

@@ -25,7 +25,8 @@ public enum ResultCodeEnum {
     VERIFY_CODE_ERROR(10008, "验证码错误"),
     PARAM_ERROR(10009, "缺少必要参数"),
     IMAGE_CODE_ERROR(10010, "图形验证码错误"),
-    IMAGE_BASE64_ERROR(10011, "图片转换base64错误");
+    IMAGE_BASE64_ERROR(10011, "图片转换base64错误"),
+    PWD_MISS_OR_ACCOUNT_NOT_EXISTS(10012, "密码错误或者用户不存在");
 
     public int code;
     public String message;

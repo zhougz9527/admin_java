@@ -1,6 +1,7 @@
 package com.example.admin_java.repository;
 
 import com.example.admin_java.entity.UserEntity;
+import org.apache.catalina.User;
 
 /**
  *
@@ -11,6 +12,10 @@ import com.example.admin_java.entity.UserEntity;
  * @Time: 22:54
  */
 public interface UserRepository extends BaseRepository<UserEntity, Integer> {
-    UserEntity findByAccount(String account);
+
     UserEntity findByUid(int uid);
+
+    UserEntity findByAccount(String account);
+
+    UserEntity findByAccountAndPassword(String account, String password);
 }

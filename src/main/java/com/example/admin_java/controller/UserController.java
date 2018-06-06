@@ -69,6 +69,14 @@ public class UserController extends BaseController {
         return ResultUtil.succeedNoData();
     }
 
+    /**
+     *
+     * 登录
+     *
+     * @param account
+     * @param password
+     * @return
+     */
     @PostMapping(path = "/login")
     public Result login(@RequestParam(value = "account", defaultValue = "") String account,
                         @RequestParam(value = "password", defaultValue = "") String password) {
@@ -76,7 +84,13 @@ public class UserController extends BaseController {
         if (StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
             ResultUtil.error(10009);
         }
-
+        String pwdMD5 = MD5Util.md5(password);
+        UserEntity userEntity = userService.findByAccountAndPassword(account, pwdMD5);
+        if (null == userEntity) {
+            return ResultUtil.error(10012);
+        }
+        userEntity.setLastLogin(DateUtil.timestampToDate(System.currentTimeMillis()));
+        userService.update(userEntity);
         return ResultUtil.succeedNoData();
     }
 
@@ -84,6 +98,10 @@ public class UserController extends BaseController {
      *
      * 注册
      *
+     * @param account
+     * @param password
+     * @param confirmPwd
+     * @param verifyCode
      * @return
      */
     @PostMapping(path = "/register")
@@ -98,8 +116,9 @@ public class UserController extends BaseController {
         if (!(RegexUtil.isMobile(account) || RegexUtil.isEmail(account))) {
             ResultUtil.error(10004);
         }
-        String redisValue = redisService.get(account).toString();
-        if (!verifyCode.equals(redisValue)) {
+        Object obj = redisService.get(account + Constant.VERIFY_CODE);
+        String redisVerifyCode = null == obj ? "" : obj.toString();
+        if (!verifyCode.equals(redisVerifyCode)) {
             ResultUtil.error(10008);
         }
         String md5Pwd = MD5Util.md5(password);
@@ -110,7 +129,10 @@ public class UserController extends BaseController {
         UserEntity userEntity = new UserEntity();
         userEntity.setAccount(account);
         userEntity.setPassword(md5Pwd);
+        userEntity.setAvatar("");
+        userEntity.setNickname("");
         userService.addUser(userEntity);
+        verifyCodeService.updateStatusByAccountAndCode(account, verifyCode);
         return ResultUtil.succeedNoData();
     }
 
@@ -118,7 +140,10 @@ public class UserController extends BaseController {
      *
      * 发送验证码
      *
+     * @param account
+     * @param imageCode
      * @return
+     * @throws ClientException
      */
     @PostMapping(path = "/sendVerifyCode")
     public Result sendVerifyCode(@RequestParam(value = "account", defaultValue = "") String account,
@@ -129,23 +154,26 @@ public class UserController extends BaseController {
         if (StringUtils.isEmpty(imageCode)) {
             return ResultUtil.error(10009);
         }
-        String redisImageCode = redisService.get(account + Constant.IMAGE_CODE).toString();
+        Object obj = null;
+        obj = redisService.get(account + Constant.IMAGE_CODE);
+        String redisImageCode = null == obj ? "" : obj.toString();
         if (!((imageCode.toUpperCase()).equals(redisImageCode))) {
             return ResultUtil.error(10010);
         }
         // 删除redis中的图片验证码
         redisService.delete(account + Constant.IMAGE_CODE);
-        String redisVerifyCode = redisService.get(account + Constant.VERIFY_CODE).toString();
+        obj = redisService.get(account + Constant.VERIFY_CODE);
+        String redisVerifyCode = null == obj ? "" : obj.toString();
         long second = System.currentTimeMillis() + 300000;
         String date = DateUtil.timestampToDate(second);
-        // redis中的验证码过期
+        // redis中的验证码过期或者是验证码未发送
         if (StringUtils.isEmpty(redisVerifyCode)) {
             String currentTime = DateUtil.timestampToDate(System.currentTimeMillis());
             VerifyCodeEntity entity = verifyCodeService.findByAccountAndDate(account, currentTime);
             String verifyCode = "";
-            if (null != entity) {
+            if (null != entity) {// mysql中有未过期的验证码
                 verifyCode = entity.getCode();
-            } else {
+            } else {// mysql中的验证码已过期或者没有验证码
                 verifyCode = createRandomNum(6);
             }
             if (RegexUtil.isMobile(account)) {
@@ -180,8 +208,9 @@ public class UserController extends BaseController {
 
     /**
      *
-     * 获取base64形式的图片验证码
+     * 获取base64验证码图片
      *
+     * @param account
      * @return
      */
     @GetMapping(path = "/getImageCode")
@@ -218,19 +247,31 @@ public class UserController extends BaseController {
      *
      * 重置密码
      *
-     * @param password
+     * @param account
+     * @param newPassword
+     * @param verifyCode
      * @return
      */
     @PostMapping(path = "/resetPwd")
-    public Result resetPwd(@RequestParam(value = "password", defaultValue = "") String password,
-                           @RequestParam(value = "account", defaultValue = "") String account) {
-        if (!(password.length() >= 6 && password.length() <=12)) {
+    public Result resetPwd(@RequestParam(value = "account", defaultValue = "") String account,
+                           @RequestParam(value = "newPassword",defaultValue = "") String newPassword,
+                           @RequestParam(value = "verifyCode", defaultValue = "") String verifyCode) {
+        if (StringUtils.isEmpty(account) || StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(verifyCode)) {
+            return ResultUtil.error(10009);
+        }
+        if (!RegexUtil.isPassword(newPassword)) {
             return ResultUtil.error(10003);
         }
-        String md5Pwd = MD5Util.md5(password);
+        Object obj = redisService.get(account + Constant.VERIFY_CODE);
+        String redisVerifyCode = null == obj ? "" : obj.toString();
+        if (!verifyCode.equals(redisVerifyCode)) {
+            ResultUtil.error(10008);
+        }
         UserEntity userEntity = userService.findByAccount(account);
-        userEntity.setPassword(md5Pwd);
+        userEntity.setLastLogin(DateUtil.timestampToDate(System.currentTimeMillis()));
+        userEntity.setPassword(MD5Util.md5(newPassword));
         userService.update(userEntity);
+        verifyCodeService.updateStatusByAccountAndCode(account, verifyCode);
         return ResultUtil.succeedNoData();
     }
 

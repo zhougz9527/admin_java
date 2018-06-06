@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Time: 22:52
  */
 public interface VerifyCodeRepository extends BaseRepository<VerifyCodeEntity, Integer> {
+
     VerifyCodeEntity findByAccount(String account);
 
     @Transactional(timeout = 10)
@@ -20,4 +21,9 @@ public interface VerifyCodeRepository extends BaseRepository<VerifyCodeEntity, I
 
     @Query("select vc from VerifyCodeEntity vc where vc.account = ?1 and ?2 < vc.expireTime ")
     VerifyCodeEntity findByAccountAndDate(String account, String date);
+
+    @Transactional(timeout = 10)
+    @Modifying
+    @Query("update VerifyCodeEntity entity set entity.status = 1 where entity.account = ?1 and entity.code = ?2")
+    void updateStatusByAccountAndCode(String account, String code);
 }

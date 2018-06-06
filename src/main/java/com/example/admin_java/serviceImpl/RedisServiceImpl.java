@@ -4,6 +4,8 @@ import com.example.admin_java.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,14 +22,27 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisService {
 
-    @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
+
+    /**
+     * 解决key value 乱码问题
+     * @param redisTemplate
+     */
+    @Autowired(required = false)
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
+        RedisSerializer stringSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(stringSerializer);
+        redisTemplate.setValueSerializer(stringSerializer);
+        redisTemplate.setHashKeySerializer(stringSerializer);
+        redisTemplate.setHashValueSerializer(stringSerializer);
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public boolean set(String key, Object value) {
         boolean flag = false;
         try {
-            ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
             operations.set(key, value);
             flag = true;
             log.info("写入redis成功: key: {}, value: {}", key, value);
@@ -42,7 +57,7 @@ public class RedisServiceImpl implements RedisService {
     public boolean set(String key, Object value, long time) {
         boolean flag = false;
         try {
-            ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
             operations.set(key, value);
             redisTemplate.expire(key, time, TimeUnit.SECONDS);
             flag = true;
@@ -55,8 +70,12 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Object get(String key) {
-        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
-        return operations.get(key);
+        Object obj = null;
+        if (exists(key)) {
+            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
+            obj = operations.get(key);
+        }
+        return obj;
     }
 
     @Override

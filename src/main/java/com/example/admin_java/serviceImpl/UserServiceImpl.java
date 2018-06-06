@@ -42,20 +42,27 @@ public class UserServiceImpl implements UserService {
     public void delete(String account) {
         UserEntity userEntity = userRepository.findByAccount(account);
         userRepository.delete(userEntity);
-        log.info("删除的用户信息: {}", userEntity.toString());
+        log.info("删除的用户信息: account: {}", account);
     }
 
     @Override
     public UserEntity findByAccount(String account) {
-        log.info("获取用户账号: {}", account);
         UserEntity userEntity = userRepository.findByAccount(account);
+        log.info("获取用户账号: account: {}", account);
+        return userEntity;
+    }
+
+    @Override
+    public UserEntity findByAccountAndPassword(String account, String password) {
+        UserEntity userEntity = userRepository.findByAccountAndPassword(account, password);
+        log.info("获取获取用户账号: account: {}, password: {}", account, password);
         return userEntity;
     }
 
     @Override
     public UserEntity findByUid(int uid) {
-        log.info("获取uid: {}", uid);
         UserEntity userEntity = userRepository.findByUid(uid);
+        log.info("获取获取用户账号: uid: {}", uid);
         return userEntity;
     }
 
