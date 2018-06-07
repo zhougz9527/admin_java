@@ -51,22 +51,9 @@ public class UserController extends BaseController {
      */
     @RequestMapping(path = "/test")
     public Result test() {
-
-//        mailService.sendSimpleMail("blackbox_9527@163.com", "blackbox_9527@163.com,你的安全代码", "你的安全代码是: " + 123456 + ", 请打死也不要告诉他人, 安全代码5分钟内有效");
-//
-//        return ResultUtil.success(System.currentTimeMillis());
-//        File dir = new File("F:/verifies");
-//        int w = 200, h = 80;
-//        for(int i = 0; i < 50; i++){
-//            String verifyCode = ImageVerifyCodeUtil.generateVerifyCode(4);
-//            File file = new File(dir, verifyCode + ".jpg");
-//            try {
-//                ImageVerifyCodeUtil.outputImage(w, h, file, verifyCode);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        return ResultUtil.succeedNoData();
+        Map<String,String> map = new HashMap<>();
+        map.put("myKey", "myValue");
+        return ResultUtil.success(map);
     }
 
     /**
