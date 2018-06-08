@@ -11,6 +11,7 @@ import com.example.admin_java.service.RedisService;
 import com.example.admin_java.service.UserService;
 import com.example.admin_java.service.VerifyCodeService;
 import com.example.admin_java.utils.*;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -78,7 +79,17 @@ public class UserController extends BaseController {
         }
         userEntity.setLastLogin(DateUtil.timestampToDate(System.currentTimeMillis()));
         userService.update(userEntity);
-        return ResultUtil.succeedNoData();
+        int uid = userEntity.getUid();
+        String token = MD5Util.md5("admin_java" + uid + System.currentTimeMillis());
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", account);
+        map.put("uid", uid);
+        String userInfo = gson.toJson(map);
+        redisService.set(token, userInfo);
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("token", token);
+        return ResultUtil.success(resultMap);
     }
 
     /**
@@ -259,6 +270,25 @@ public class UserController extends BaseController {
         userEntity.setPassword(MD5Util.md5(newPassword));
         userService.update(userEntity);
         verifyCodeService.updateStatusByAccountAndCode(account, verifyCode);
+        return ResultUtil.succeedNoData();
+    }
+
+    /**
+     *
+     * 登出
+     *
+     * @return
+     */
+    @PostMapping(path = "/logout")
+    public Result logout(@RequestParam(value = "token",defaultValue = "") String token) {
+        if (StringUtils.isEmpty(token)) {
+            return ResultUtil.error(10009);
+        }
+        String UserInfo = (String) redisService.get(token);
+        if (StringUtils.isEmpty(UserInfo)) {
+            return  ResultUtil.error(10013);
+        }
+        redisService.delete(token);
         return ResultUtil.succeedNoData();
     }
 
