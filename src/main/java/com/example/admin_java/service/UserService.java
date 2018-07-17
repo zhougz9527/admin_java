@@ -1,7 +1,6 @@
 package com.example.admin_java.service;
 
 import com.example.admin_java.entity.UserEntity;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.List;
 

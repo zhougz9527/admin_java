@@ -1,7 +1,6 @@
 package com.example.admin_java.repository;
 
 import com.example.admin_java.entity.UserEntity;
-import org.apache.catalina.User;
 
 /**
  *
