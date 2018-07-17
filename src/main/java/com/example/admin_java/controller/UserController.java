@@ -52,6 +52,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(path = "/test")
     public Result test() {
+        // 添加的注释
         Map<String,String> map = new HashMap<>();
         map.put("myKey", "myValue");
         return ResultUtil.success(map);
