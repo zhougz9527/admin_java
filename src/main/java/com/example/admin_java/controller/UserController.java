@@ -1,15 +1,16 @@
 package com.example.admin_java.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
+import com.example.admin_java.entity.ImageEntity;
 import com.example.admin_java.entity.UserEntity;
 import com.example.admin_java.entity.VerifyCodeEntity;
 import com.example.admin_java.global.Constant;
 import com.example.admin_java.result.Result;
 import com.example.admin_java.result.ResultUtil;
-import com.example.admin_java.service.MailService;
-import com.example.admin_java.service.RedisService;
-import com.example.admin_java.service.UserService;
-import com.example.admin_java.service.VerifyCodeService;
+import com.example.admin_java.service.*;
 import com.example.admin_java.utils.*;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,15 +37,14 @@ public class UserController extends BaseController {
 
     @Autowired
     UserService userService;
-
     @Autowired
     RedisService redisService;
-
     @Autowired
     VerifyCodeService verifyCodeService;
-
     @Autowired
     MailService mailService;
+    @Autowired
+    ImageService imageService;
 
     /**
      *
@@ -52,10 +54,9 @@ public class UserController extends BaseController {
      */
     @RequestMapping(path = "/test")
     public Result test() {
-        // 添加的注释
-        Map<String,String> map = new HashMap<>();
-        map.put("myKey", "myValue");
-        return ResultUtil.success(map);
+        List<ImageEntity> entityList = imageService.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
+
+        return ResultUtil.success(entityList);
     }
 
     /**

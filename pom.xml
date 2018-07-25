@@ -124,6 +124,20 @@
 			<systemPath>${project.basedir}/src/main/resources/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
 		</dependency>
 		<!-- 阿里云短信jar依赖 end -->
+
+		<!-- OkHttp3 -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.10.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.46</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

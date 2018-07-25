@@ -10,17 +10,19 @@ package com.example.admin_java.result;
  */
 public class ResultUtil {
 
+    static int[] data = {};
+
     public static Result success(Object object) {
         Result result = new Result(200, ResultCodeEnum.getMessageByCode(200), object);
         return result;
     }
 
     public static Result succeedNoData() {
-        return success(null);
+        return success(data);
     }
 
     public static Result error(int code) {
-        Result result = new Result(code, ResultCodeEnum.getMessageByCode(code));
+        Result result = new Result(code, ResultCodeEnum.getMessageByCode(code), data);
         return result;
     }
 
