@@ -24,7 +24,7 @@ public class ImageServiceTest {
 
     @Test
     public void test() {
-        imageService.saveImage();
+//        imageService.saveImage();
 //        List<ImageEntity> list = imageService.findByUsedAndType();
 //        System.out.println(list);
     }

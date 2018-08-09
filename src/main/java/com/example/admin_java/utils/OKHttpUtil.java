@@ -5,6 +5,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @Author: Think
  * @Date: 2018/7/25
@@ -19,24 +22,32 @@ public class OKHttpUtil {
      * @return
      */
     public static String get (String url) {
+        OkHttpClient okHttpClient = new OkHttpClient()
+                .newBuilder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())//配置
+                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())//配置
+                .build();
 
-        String responseBody = "";
         Request request = new Request.Builder()
                 .url(url)
                 .build();
+        String responseBody = "";
         Response response = null;
         try {
-            OkHttpClient okHttpClient = new OkHttpClient();
             response = okHttpClient.newCall(request).execute();
-            int status = response.code();
-            if (response.isSuccessful()) {
-                return response.body().string();
-            }
-        } catch (Exception e) {
-            log.error("okhttp get error, message: {}", e.getMessage());
-        } finally {
-            if (response != null) {
-                response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.info("url: {}, okhttp execute exception:{}", url, e.getMessage());
+        }
+        if (null != response) {
+            try {
+                responseBody = response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.info("url: {}, okhttp response exception:{}", url, e.getMessage());
             }
         }
         return responseBody;

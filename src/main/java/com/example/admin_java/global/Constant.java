@@ -19,8 +19,33 @@ public class Constant {
     public static final String IMAGE_CODE = "_imageCode";
 
     /**
+     * 天气信息的key
+     */
+    public static final String WEATHER_KEY = "bc0418b57b2d4918819d3974ac1285d9";
+
+    /**
      * redisKey
      */
     public static final String VERIFY_CODE = "_verifyCode";
+
+    /**
+     * meizi url
+     */
+    public static final String BELLE_URL = "http://gank.io/api/data/福利";
+
+    /**
+     * ip所属城市的url
+     */
+    public static final String IP_URL = "http://ip.taobao.com/service/getIpInfo.php";
+
+    /**
+     * 获取省份的url
+     */
+    public static final String PROVINCES_URL = "http://guolin.tech/api/china";
+
+    /**
+     * 获取天气信息的url
+     */
+    public static final String WEATHER_URL = "http://guolin.tech/api/weather";
 
 }

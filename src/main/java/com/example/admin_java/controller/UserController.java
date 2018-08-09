@@ -54,9 +54,8 @@ public class UserController extends BaseController {
      */
     @RequestMapping(path = "/test")
     public Result test() {
-        List<ImageEntity> entityList = imageService.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
-
-        return ResultUtil.success(entityList);
+//        imageService.saveImage();
+        return ResultUtil.succeedNoData();
     }
 
     /**

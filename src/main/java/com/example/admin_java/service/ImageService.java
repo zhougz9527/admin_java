@@ -11,8 +11,6 @@ import java.util.List;
  */
 public interface ImageService {
 
-    void saveImage();
-
-    List<ImageEntity> findFirstByUsedAndTypeOrderByIdAsc(int used, int type);
+    void saveImage(String url);
 
 }
