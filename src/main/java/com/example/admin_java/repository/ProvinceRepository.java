@@ -9,5 +9,6 @@ import com.example.admin_java.entity.ProvinceEntity;
  */
 public interface ProvinceRepository extends BaseRepository<ProvinceEntity, Integer> {
 
+    ProvinceEntity findByProvinceName(String name);
 
 }

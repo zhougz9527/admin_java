@@ -1,5 +1,7 @@
 package com.example.admin_java.result;
 
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
+
 /**
  *
  * 响应码枚举
@@ -26,8 +28,11 @@ public enum ResultCodeEnum {
     PARAM_ERROR(10009, "缺少必要参数"),
     IMAGE_CODE_ERROR(10010, "图形验证码错误"),
     IMAGE_BASE64_ERROR(10011, "图片转换base64错误"),
-    PWD_MISS_OR_ACCOUNT_NOT_EXISTS(10012, "密码错误或者用户不存在"),
-    TOKEN_NOT_EXISTS(10013, "token不存在");
+    PWD_MISS_OR_ACCOUNT_NOT_EXISTS(10012, "用户不存在"),
+    TOKEN_NOT_NULL(10013, "token不能为空"),
+    PWD_ERROR(10014, "密码错误"),
+    TOKEN_NOT_EXISTS(10015, "token无效"),
+    LOCATION_ERROR(10016, "定位失败");
 
     public int code;
     public String message;

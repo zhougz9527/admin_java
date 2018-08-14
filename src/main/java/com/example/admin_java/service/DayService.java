@@ -9,4 +9,6 @@ public interface DayService {
 
     String getIpCity(String url);
 
+    Object getWeather(String url);
+
 }

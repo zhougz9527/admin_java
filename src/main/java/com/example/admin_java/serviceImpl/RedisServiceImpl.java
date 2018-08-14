@@ -1,5 +1,6 @@
 package com.example.admin_java.serviceImpl;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.example.admin_java.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,60 +24,50 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RedisServiceImpl implements RedisService {
 
+    @Autowired
     private RedisTemplate redisTemplate;
 
-    /**
-     * 解决key value 乱码问题
-     * @param redisTemplate
-     */
-    @Autowired(required = false)
+    private boolean flag = false;
+
+
+    @Autowired
     public void setRedisTemplate(RedisTemplate redisTemplate) {
-        RedisSerializer stringSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(stringSerializer);
-        redisTemplate.setValueSerializer(stringSerializer);
-        redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(stringSerializer);
+        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
+        redisTemplate.setKeySerializer(fastJsonRedisSerializer);//单独设置keySerializer
+        redisTemplate.setValueSerializer(fastJsonRedisSerializer);//单独设置valueSerializer
         this.redisTemplate = redisTemplate;
     }
 
+
     @Override
     public boolean set(String key, Object value) {
-        boolean flag = false;
         try {
-            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
-            operations.set(key, value);
+            redisTemplate.opsForValue().set(key, value);
             flag = true;
-            log.info("写入redis成功: key: {}, value: {}", key, value);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("写入redis失败: key: {}, value: {}, message: {}", key, value, e.getMessage());
+            log.error("存入redis失败: {}", e.getMessage());
         }
         return flag;
     }
 
     @Override
     public boolean set(String key, Object value, long time) {
-        boolean flag = false;
         try {
-            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
-            operations.set(key, value);
+            redisTemplate.opsForValue().set(key, value);
             redisTemplate.expire(key, time, TimeUnit.SECONDS);
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("写入redis失败: key: {}, value: {}, message: {}", key, value, e.getMessage());
+            log.error("存入redis失败: {}", e.getMessage());
         }
         return flag;
     }
 
     @Override
     public Object get(String key) {
-        Object obj = null;
-        if (exists(key)) {
-            ValueOperations<String, Object> operations = redisTemplate.opsForValue();
-            obj = operations.get(key);
-        }
-        return obj;
+        Object object = redisTemplate.opsForValue().get(key);
+        return object;
     }
 
     @Override
@@ -85,84 +76,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void delete(String key) {
+    public boolean delete(String key) {
         if (exists(key)) {
-            redisTemplate.delete(key);
+            return redisTemplate.delete(key);
         }
+        return false;
     }
 
-    @Override
-    public long incLong(String key, long step) {
-        return 0;
-    }
-
-    @Override
-    public String getHash(String hKey, String key) {
-        return null;
-    }
-
-    @Override
-    public void setHash(String hKey, String key, String value) {
-
-    }
-
-    @Override
-    public Set<String> getHashByHKey(String hKey) {
-        return null;
-    }
-
-    @Override
-    public long deleteHash(String hKey, String key) {
-        return 0;
-    }
-
-    @Override
-    public String getListPopLeft(String key) {
-        return null;
-    }
-
-    @Override
-    public String getListPopRight(String key) {
-        return null;
-    }
-
-    @Override
-    public void setLeftPush(String key, String value) {
-
-    }
-
-    @Override
-    public void setRightPush(String key, String value) {
-
-    }
-
-    @Override
-    public long getListSize(String key) {
-        return 0;
-    }
-
-    @Override
-    public long removeList(String key, long count, String value) {
-        return 0;
-    }
-
-    @Override
-    public long setSet(String key, String value) {
-        return 0;
-    }
-
-    @Override
-    public long deleteSet(String key, String value) {
-        return 0;
-    }
-
-    @Override
-    public String getSet(String key) {
-        return null;
-    }
-
-    @Override
-    public long getSetSize(String key) {
-        return 0;
-    }
 }

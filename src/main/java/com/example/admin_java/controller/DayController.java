@@ -1,6 +1,7 @@
 package com.example.admin_java.controller;
 
 import com.example.admin_java.entity.ImageEntity;
+import com.example.admin_java.repository.ImageRepository;
 import com.example.admin_java.result.Result;
 import com.example.admin_java.result.ResultUtil;
 import com.example.admin_java.service.DayService;
@@ -27,14 +28,14 @@ import java.util.Map;
 public class DayController extends BaseController {
 
     @Autowired
-    ImageService imageService;
+    ImageRepository imageRepository;
     @Autowired
     DayService dayService;
 
 
     @GetMapping("/meizi")
     public Result meizi () {
-        List<ImageEntity> imageEntityList = imageService.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
+        List<ImageEntity> imageEntityList = imageRepository.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
         List<Map<String, String>> meiziList = new ArrayList<>();
         for (ImageEntity imageEntity : imageEntityList) {
             Map<String, String> meiziMap = new HashMap<>();

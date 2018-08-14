@@ -1,4 +1,4 @@
-package com.example.admin_java.global;
+package com.example.admin_java.schedule;
 
 import com.example.admin_java.entity.ImageEntity;
 import com.example.admin_java.repository.ImageRepository;
@@ -21,17 +21,15 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class ScheduledTasks {
+public class Task {
 
-    @Autowired
-    ImageService imageService;
     @Autowired
     ImageRepository imageRepository;
 
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateImageStatus() {
-        List<ImageEntity> imageEntityList = imageService.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
+        List<ImageEntity> imageEntityList = imageRepository.findFirstByUsedAndTypeOrderByIdAsc(0, 0);
         log.info("start updateImageStatus ...");
         for (ImageEntity imageEntity : imageEntityList) {
             imageEntity.setUsed(1);

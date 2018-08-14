@@ -7,16 +7,24 @@ package com.example.admin_java.global;
  */
 public class Constant {
 
-    public static final long REDIS_TIME_OUT = 3600;
+    /**
+     * token的过期时间
+     */
+    public static final int REDIS_TIME_OUT = 7200;
     /**
      * 验证码超时时间
      */
-    public static final long VERIFY_CODE_TIME_OUT = 300;
+    public static final int VERIFY_CODE_TIME_OUT = 300;
 
     /**
      * redisKey
      */
     public static final String IMAGE_CODE = "_imageCode";
+
+    /**
+     * 请求header的key
+     */
+    public static final String HEADER_KEY = "X-Admin-Token";
 
     /**
      * 天气信息的key

@@ -1,7 +1,6 @@
 package com.example.admin_java.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.admin_java.entity.CityEntity;
 import com.example.admin_java.entity.CountyEntity;
@@ -14,11 +13,9 @@ import com.example.admin_java.result.Result;
 import com.example.admin_java.result.ResultUtil;
 import com.example.admin_java.service.DayService;
 import com.example.admin_java.utils.OKHttpUtil;
-import io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResultUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,19 +46,31 @@ public class WeatherController {
     @Autowired
     CountyRepository countyRepository;
 
+
     @GetMapping("")
-    public Result getWeather(@RequestParam(value = "weatherid", defaultValue = "") String weatherId) {
-        String url = Constant.WEATHER_URL + "?cityid=" + weatherId + "&key=" + Constant.WEATHER_KEY;
+    public Result getIPWeather(HttpServletRequest httpServletRequest) {
+        String ip = httpServletRequest.getRemoteAddr();
+        String url = Constant.IP_URL + "?ip=" + ip;
         String response = OKHttpUtil.get(url);
-        if (!StringUtils.isEmpty(response) && !"Request weather info with error: undefined method `city' for nil:NilClass".equals(response)) {
-            JSONObject jsonObject = JSON.parseObject(response);
-            if (null != jsonObject) {
-                return ResultUtil.success(jsonObject);
-            }
+        JSONObject jsonObject = JSON.parseObject(response);
+        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+        String city = jsonObject1.getString("city");
+        List<CountyEntity> countyEntities = countyRepository.findByCountyNameContaining(city);
+        if (1 != countyEntities.size()) {
+            return ResultUtil.error(10016);
         }
-        return ResultUtil.succeedNoData();
+        String weatherId = countyEntities.get(0).getWeatherId();
+        String weatherUrl = Constant.WEATHER_URL + "?cityid=" + weatherId + "&key=" + Constant.WEATHER_KEY;
+        Object object = dayService.getWeather(weatherUrl);
+        return ResultUtil.success(object);
     }
 
+    @GetMapping("/getweather")
+    public Result getWeather(@RequestParam(value = "weatherid", defaultValue = "") String weatherId) {
+        String url = Constant.WEATHER_URL + "?cityid=" + weatherId + "&key=" + Constant.WEATHER_KEY;
+        Object object = dayService.getWeather(url);
+        return ResultUtil.success(object);
+    }
 
 
     @GetMapping("/search")

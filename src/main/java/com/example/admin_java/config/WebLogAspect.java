@@ -1,4 +1,4 @@
-package com.example.admin_java.global;
+package com.example.admin_java.config;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
