@@ -6,8 +6,12 @@ import com.example.admin_java.global.Constant;
 import com.example.admin_java.result.Result;
 import com.example.admin_java.result.ResultUtil;
 import com.example.admin_java.service.RedisService;
+import com.example.admin_java.service.UserService;
+import com.example.admin_java.utils.JWTUtil;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -32,6 +36,8 @@ public class TokenFilter implements Filter {
 
     @Autowired
     RedisService redisService;
+    @Autowired
+    UserService userService;
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
@@ -69,14 +75,24 @@ public class TokenFilter implements Filter {
                 code = -1;
                 result = ResultUtil.error(10013);
             } else {
-                UserEntity user = (UserEntity) redisService.get(token);
-                if (null == user) {
+                // 获取jwt中的用户名
+                String username = JWTUtil.getUsername(token);
+                String redisToken = (String) redisService.get(username);
+                if (StringUtils.isEmpty(redisToken)) {// 如果redisToken过期或者用户登出
                     code = -1;
                     result = ResultUtil.error(10015);
                 } else {
-                    code = 0;
-                    isFilter = true;
-                    request.setAttribute("user", user);
+                    UserEntity user = userService.findByAccount(username);
+                    if (null == user) {
+                        code = -1;
+                        result = ResultUtil.error(10015);
+                    } else {
+                        code = 0;
+                        isFilter = true;
+                        // 更新redis中的token的过期时间
+                        redisService.set(username, token, Constant.JWT_EXPIRE_TIME);
+                        request.setAttribute("userEntity", user);
+                    }
                 }
             }
             if (-1 == code) {// 验证失败
@@ -107,7 +123,7 @@ public class TokenFilter implements Filter {
             }
 
             if (isFilter) {
-                log.info("token filter过滤ok!");
+                log.info("token filter ok!");
                 chain.doFilter(request, response);
             }
         }

@@ -8,9 +8,10 @@ package com.example.admin_java.global;
 public class Constant {
 
     /**
-     * token的过期时间
+     * jwt token的过期时间(秒)
      */
-    public static final int REDIS_TIME_OUT = 7200;
+    public static final int JWT_EXPIRE_TIME = 3600;
+
     /**
      * 验证码超时时间
      */

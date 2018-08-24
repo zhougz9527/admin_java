@@ -26,6 +26,8 @@ public interface UserService {
 
     UserEntity findByAccountAndPassword(String account, String password);
 
+    UserEntity findByAccountAndPasswordAndStatus(String account, String password, int status);
+
     UserEntity findByUid(int uid);
 
 }

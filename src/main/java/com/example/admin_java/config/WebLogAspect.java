@@ -1,6 +1,6 @@
 package com.example.admin_java.config;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -64,8 +64,7 @@ public class WebLogAspect {
     @AfterReturning(returning = "result", pointcut = "webLog()")
     public void doAfterReturning(Object result) throws Throwable{
         //处理完请求，返回内容
-        Gson gson = new Gson();
-        log.info("RESPONSE: {}", gson.toJson(result));
+        log.info("RESPONSE: {}", JSON.toJSONString(result));
         log.info("SPEND TIME: {}", (System.currentTimeMillis() - startTime.get()));
     }
 

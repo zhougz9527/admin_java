@@ -5,7 +5,6 @@ import com.example.admin_java.repository.ImageRepository;
 import com.example.admin_java.result.Result;
 import com.example.admin_java.result.ResultUtil;
 import com.example.admin_java.service.DayService;
-import com.example.admin_java.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

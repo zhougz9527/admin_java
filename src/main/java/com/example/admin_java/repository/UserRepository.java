@@ -17,4 +17,6 @@ public interface UserRepository extends BaseRepository<UserEntity, Integer> {
     UserEntity findByAccount(String account);
 
     UserEntity findByAccountAndPassword(String account, String password);
+
+    UserEntity findByAccountAndPasswordAndStatus(String account, String password, int status);
 }

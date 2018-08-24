@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity findByAccountAndPasswordAndStatus(String account, String password, int status) {
+        return userRepository.findByAccountAndPasswordAndStatus(account, password, status);
+    }
+
+    @Override
     public UserEntity findByUid(int uid) {
         UserEntity userEntity = userRepository.findByUid(uid);
         log.info("获取获取用户账号: uid: {}", uid);

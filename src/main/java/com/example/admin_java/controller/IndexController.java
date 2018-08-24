@@ -53,15 +53,15 @@ public class IndexController extends BaseController {
             ResultUtil.error(10009);
         }
         String pwdMD5 = MD5Util.md5(password);
-        UserEntity userEntity = userService.findByAccountAndPassword(account, pwdMD5);
+        UserEntity userEntity = userService.findByAccountAndPasswordAndStatus(account, pwdMD5, 1);
         if (null == userEntity) {
             return ResultUtil.error(10012);
         }
         userEntity.setLastLogin(DateUtil.timestampToDate(System.currentTimeMillis()));
         userService.update(userEntity);
         int uid = userEntity.getUid();
-        String token = MD5Util.md5(String.valueOf(uid + System.currentTimeMillis()));
-        redisService.set(token, userEntity, Constant.REDIS_TIME_OUT);
+        String token = JWTUtil.createSignature(account, pwdMD5 + uid);
+        redisService.set(account, token, Constant.JWT_EXPIRE_TIME);
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put(Constant.HEADER_KEY, token);
         return ResultUtil.success(resultMap);
