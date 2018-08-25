@@ -38,7 +38,7 @@ public class Constant {
     public static final String VERIFY_CODE = "_verifyCode";
 
     /**
-     * meizi url
+     * 妹子图 url
      */
     public static final String BELLE_URL = "http://gank.io/api/data/福利";
 
@@ -56,5 +56,10 @@ public class Constant {
      * 获取天气信息的url
      */
     public static final String WEATHER_URL = "http://guolin.tech/api/weather";
+
+    /**
+     * 每日一文 url
+     */
+    public static final String ARTICLE_URL = "https://meiriyiwen.com/";
 
 }

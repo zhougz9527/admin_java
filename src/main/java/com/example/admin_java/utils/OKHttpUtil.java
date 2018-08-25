@@ -6,6 +6,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +34,11 @@ public class OKHttpUtil {
 
         Request request = new Request.Builder()
                 .url(url)
+                .addHeader("Referer", "https://www.google.com.hk/")
+                .addHeader("Upgrade-Insecure-Requests", "1")
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36")
+                .addHeader("X-DevTools-Emulate-Network-Conditions-Client-Id", "5029D206E9CA0EA382EE231E9A595079")
+                .addHeader("DNT", "1")
                 .build();
         String responseBody = "";
         Response response = null;
