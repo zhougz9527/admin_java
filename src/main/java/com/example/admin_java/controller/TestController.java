@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2018/8/22
  * @Time: 17:54
  */
-@Slf4j
 @RestController
 @RequestMapping("/test")
 public class TestController extends BaseController {

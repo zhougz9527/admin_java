@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
-public class RedisServiceImpl implements RedisService {
+public class RedisServiceImpl extends BaseServiceImpl implements RedisService {
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -46,7 +46,7 @@ public class RedisServiceImpl implements RedisService {
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("存入redis失败: {}", e.getMessage());
+            logger.error("存入redis失败: " + e.getMessage());
         }
         return flag;
     }
@@ -59,7 +59,7 @@ public class RedisServiceImpl implements RedisService {
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("存入redis失败: {}", e.getMessage());
+            logger.error("存入redis失败: " + e.getMessage());
         }
         return flag;
     }

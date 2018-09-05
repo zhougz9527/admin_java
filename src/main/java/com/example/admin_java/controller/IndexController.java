@@ -23,7 +23,6 @@ import java.util.Map;
  * @Date: 2018/8/13
  * @Time: 16:14
  */
-@Slf4j
 @RestController
 @RequestMapping("/")
 public class IndexController extends BaseController {
@@ -48,7 +47,7 @@ public class IndexController extends BaseController {
     @PostMapping(path = "/login")
     public Result login(@RequestParam(value = "account", defaultValue = "") String account,
                         @RequestParam(value = "password", defaultValue = "") String password) {
-        log.info("account: {}, password: {}", account, password);
+        logger.info("account: "+account+", password: "+password);
         if (StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
             ResultUtil.error(10009);
         }
@@ -80,7 +79,7 @@ public class IndexController extends BaseController {
                            @RequestParam(value = "password", defaultValue = "") String password,
                            @RequestParam(value = "confirmPwd", defaultValue = "") String confirmPwd,
                            @RequestParam(value = "verifyCode", defaultValue = "") String verifyCode) {
-        log.info("account: {}, password: {}", account, password);
+        logger.info("account: "+account+", password: " + password);
         if (!(confirmPwd.equals(verifyCode) && RegexUtil.isPassword(password))) {
             ResultUtil.error(10003);
         }
@@ -225,10 +224,10 @@ public class IndexController extends BaseController {
         int w = 200, h = 80;
         try {
             ImageVerifyCodeUtil.outputImage(w, h, file, imageCode);
-            log.info("imageCodeFile: {}", file.getPath());
+            logger.info("imageCodeFile: " + file.getPath());
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("生成图形验证码出错, message: {}" + e.getMessage());
+            logger.error("生成图形验证码出错, message " + e.getMessage());
         }
         String base64Str = Base64Util.imageToBase64Str(file.getPath());
         if (!StringUtils.isEmpty(base64Str)) {

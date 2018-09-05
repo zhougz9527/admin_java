@@ -4,6 +4,8 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.example.admin_java.utils.AliyunMessageUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +15,9 @@ import java.util.Map;
  * @Date: 2018/5/24
  * @Time: 22:41
  */
-@Slf4j
 public class BaseController {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      *
@@ -47,9 +50,9 @@ public class BaseController {
         paramMap.put("templateCode", "SMS_136391309");
         paramMap.put("jsonContent", jsonContent);
         SendSmsResponse sendSmsResponse = AliyunMessageUtil.sendSms(paramMap);
-        log.info("sendSmsResponse: {}", sendSmsResponse.toString());
+//        log.info("sendSmsResponse: {}", sendSmsResponse.toString());
         if (!(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK"))) {
-            log.info("sendSmsResponse.getCode(): {}", sendSmsResponse.getCode().toString());
+//            log.info("sendSmsResponse.getCode(): {}", sendSmsResponse.getCode().toString());
             return false;
         }
         return true;

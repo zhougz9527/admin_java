@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
  * @Time: 17:14
  */
 @Service
-public class DayServiceImpl implements DayService {
+public class DayServiceImpl extends BaseServiceImpl implements DayService {
 
     @Override
     public String getIpCity(String url) {

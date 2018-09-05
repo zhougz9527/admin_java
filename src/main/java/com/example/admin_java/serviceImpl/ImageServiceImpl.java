@@ -19,23 +19,22 @@ import java.util.List;
  * @Date: 2018/7/25
  * @Time: 14:15
  */
-@Slf4j
 @Service
-public class ImageServiceImpl implements ImageService {
+public class ImageServiceImpl extends BaseServiceImpl implements ImageService {
 
     @Autowired
     ImageRepository imageRepository;
 
     @Override
     public void saveImage(String url) {
-        log.info("meizi url: {}", url);
+        logger.info("meizi url: " + url);
         String rsp = OKHttpUtil.get(url);
         JSONObject jsonObject = JSON.parseObject(rsp);
         JSONArray jsonArray = jsonObject.getJSONArray("results");
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
             String imageUrl = jsonObject1.getString("url");
-            log.info("image url: {}", imageUrl);
+            logger.info("image url: " + imageUrl);
             ImageEntity entity = imageRepository.findByImageUrl(imageUrl);
             if (null == entity) {
                 ImageEntity imageEntity = new ImageEntity();
@@ -44,12 +43,12 @@ public class ImageServiceImpl implements ImageService {
                 imageRepository.save(imageEntity);
             }
         }
-        log.info("insert completed ... ");
+        logger.info("insert completed ... ");
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            log.info("Thread sleep exception: {}", e.getMessage());
+            logger.info("Thread sleep exception: " + e.getMessage());
         }
     }
 

@@ -30,7 +30,6 @@ import java.util.Map;
  * @Date: 2018/8/9
  * @Time: 10:06
  */
-@Slf4j
 @RestController
 @RequestMapping("/day")
 public class DayController extends BaseController {

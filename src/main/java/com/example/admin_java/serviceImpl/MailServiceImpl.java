@@ -18,9 +18,8 @@ import javax.mail.internet.MimeMessage;
  * @Date: 2018/6/4
  * @Time: 21:58
  */
-@Slf4j
 @Service
-public class MailServiceImpl implements MailService {
+public class MailServiceImpl extends BaseServiceImpl implements MailService {
 
 
     @Autowired
@@ -47,9 +46,9 @@ public class MailServiceImpl implements MailService {
         message.setText(content);//邮件主体
         try {
             javaMailSender.send(message);
-            log.info("简单邮件已经发送");
+            logger.info("简单邮件已经发送");
         } catch (MailException e) {
-            log.error("发送简单邮件发生异常！", e);
+            logger.error("发送简单邮件发生异常！", e);
         }
     }
 
@@ -74,9 +73,9 @@ public class MailServiceImpl implements MailService {
             helper.setText(content, true);
 
             javaMailSender.send(message);
-            log.info("html邮件发送成功");
+            logger.info("html邮件发送成功");
         } catch (MessagingException e) {
-            log.error("html邮件发送失败", e);
+            logger.error("html邮件发送失败", e);
         }
     }
 

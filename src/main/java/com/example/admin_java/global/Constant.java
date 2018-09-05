@@ -62,4 +62,9 @@ public class Constant {
      */
     public static final String ARTICLE_URL = "https://meiriyiwen.com/";
 
+    /**
+     * 必应背景图片 url
+     */
+    public static final String BING_URL = "https://api.dujin.org/bing/1920.php";
+
 }

@@ -10,6 +10,8 @@ import com.example.admin_java.service.UserService;
 import com.example.admin_java.utils.JWTUtil;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -30,9 +32,10 @@ import java.io.UnsupportedEncodingException;
  * @Date: 2018/8/7
  * @Time: 17:48
  */
-@Slf4j
 @WebFilter(urlPatterns = { "/day/*", "/user/*", "/weather/*" }, filterName = "tokenFilter")
 public class TokenFilter implements Filter {
+
+    private static Logger logger = LoggerFactory.getLogger(TokenFilter.class);
 
     @Autowired
     RedisService redisService;
@@ -108,9 +111,9 @@ public class TokenFilter implements Filter {
                     writer.close();
                     osw.close();
                 } catch (UnsupportedEncodingException e) {
-                    log.error("过滤器返回信息失败: {}", e.getMessage());
+                    logger.error("过滤器返回信息失败: " + e.getMessage());
                 } catch (IOException e) {
-                    log.error("过滤器返回信息失败: {}", e.getMessage());
+                    logger.error("过滤器返回信息失败: " + e.getMessage());
                 } finally {
                     if (null != writer) {
                         writer.close();
@@ -123,7 +126,7 @@ public class TokenFilter implements Filter {
             }
 
             if (isFilter) {
-                log.info("token filter ok!");
+                logger.info("token filter ok!");
                 chain.doFilter(request, response);
             }
         }
