@@ -53,7 +53,7 @@ public class WeatherController {
     @GetMapping("")
     public Result getIPWeather(HttpServletRequest httpServletRequest) {
 //        String ip = httpServletRequest.getRemoteAddr();
-        String ip = "125.120.253.78";
+        String ip = "36.24.186.191";
         String url = Constant.IP_URL + "?ip=" + ip;
         String response = OKHttpUtil.get(url);
         JSONObject jsonObject = JSON.parseObject(response);

@@ -164,8 +164,27 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+                <!--将第三方jar包打到WEB-INF/lib 下-->
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
 			</plugin>
 		</plugins>
+
+        <!--<resources>-->
+            <!--<resource>-->
+                <!--<directory>lib</directory>-->
+                <!--<targetPath>META-INF/lib/</targetPath>-->
+                <!--<includes>-->
+                    <!--<include>**/*.jar</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
+            <!--&lt;!&ndash; 某些情况下，打包后运行不起来需要打开注释 &ndash;&gt;-->
+            <!--<resource>-->
+                <!--<directory>src/main/resources</directory>-->
+                <!--<targetPath>META-INF/classes/</targetPath>-->
+            <!--</resource>-->
+        <!--</resources>-->
 	</build>
 
 

@@ -2,9 +2,6 @@ package com.example.admin_java.schedule;
 
 import com.example.admin_java.entity.ImageEntity;
 import com.example.admin_java.repository.ImageRepository;
-import com.example.admin_java.service.ImageService;
-import com.example.admin_java.utils.DateUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

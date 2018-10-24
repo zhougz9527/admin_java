@@ -215,6 +215,7 @@ public class IndexController extends BaseController {
             return ResultUtil.error(10004);
         }
         String imageCode = ImageVerifyCodeUtil.generateVerifyCode(4);
+        logger.info("验证码: {}", imageCode);
         String rootFile = System.getProperty("user.dir") + File.separator + "image";
         File dir = new File(rootFile);
         if (!dir.exists()) {

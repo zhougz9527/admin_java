@@ -3,7 +3,6 @@ package com.example.admin_java.controller;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.example.admin_java.utils.AliyunMessageUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

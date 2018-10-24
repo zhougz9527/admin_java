@@ -3,7 +3,9 @@ package com.example.admin_java;
 import com.example.admin_java.entity.CityEntity;
 import com.example.admin_java.entity.ImageEntity;
 import com.example.admin_java.repository.CityRepository;
+import com.example.admin_java.schedule.Task;
 import com.example.admin_java.service.ImageService;
+import com.example.admin_java.service.WebSocketService;
 import com.example.admin_java.utils.JWTUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @Author: Think

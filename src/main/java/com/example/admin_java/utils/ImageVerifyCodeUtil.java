@@ -42,10 +42,6 @@ public class ImageVerifyCodeUtil {
     }
 
     /**
-     * 生成随机数字
-     */
-
-    /**
      * 使用指定源生成验证码
      * @param verifySize    验证码长度
      * @param sources   验证码字符源
